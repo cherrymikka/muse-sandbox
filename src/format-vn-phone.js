@@ -18,5 +18,49 @@
  * @returns {string | null}
  */
 export function formatVnPhone(input) {
-  throw new Error("Not implemented");
+  if (typeof input !== "string") {
+    return null;
+  }
+
+  // Remove spaces, dots, dashes and parentheses.
+  const cleaned = input.replace(/[\s.()-]/g, "");
+
+  if (cleaned === "") {
+    return null;
+  }
+
+  let digits = cleaned;
+
+  if (digits.startsWith("+")) {
+    // Only the Vietnamese country code is accepted after "+".
+    const rest = digits.slice(1);
+    if (!rest.startsWith("84")) {
+      return null;
+    }
+    digits = `0${rest.slice(2)}`;
+  } else if (digits.startsWith("84")) {
+    digits = `0${digits.slice(2)}`;
+  }
+
+  // Anything left that is not a digit makes the input invalid.
+  if (!/^\d+$/.test(digits)) {
+    return null;
+  }
+
+  // A 9-digit number is missing its leading 0.
+  if (digits.length === 9) {
+    digits = `0${digits}`;
+  }
+
+  // Valid mobile: 10 digits starting with 03, 05, 07, 08 or 09.
+  if (digits.length === 10 && /^(03|05|07|08|09)/.test(digits)) {
+    return `${digits.slice(0, 4)} ${digits.slice(4, 7)} ${digits.slice(7)}`;
+  }
+
+  // Valid landline: 11 digits starting with 02.
+  if (digits.length === 11 && digits.startsWith("02")) {
+    return `${digits.slice(0, 3)} ${digits.slice(3, 7)} ${digits.slice(7)}`;
+  }
+
+  return null;
 }
