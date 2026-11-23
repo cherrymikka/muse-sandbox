@@ -38,7 +38,15 @@ export function formatVnPhone(input) {
       return null;
     }
     digits = `0${rest.slice(2)}`;
-  } else if (digits.startsWith("84")) {
+  } else if (
+    digits.startsWith("84") &&
+    (digits.length === 11 || digits.length === 12)
+  ) {
+    // Without a "+", "84" is a country code only when what follows it
+    // can form a valid number: 84 + 9 digits = mobile, 84 + 10 = landline.
+    // A 9-digit input such as "845678901" is not international — it is a
+    // national number missing its leading 0 ("0845678901"), so it must
+    // fall through to the 9-digit case below instead.
     digits = `0${digits.slice(2)}`;
   }
 
