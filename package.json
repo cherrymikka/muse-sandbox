@@ -1,0 +1,10 @@
+{
+  "name": "muse-sandbox",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Throwaway repo to test delegating a small coding task to Muse over Git",
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/"
+  }
+}
